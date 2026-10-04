@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drappr AI | Phase 1 - Global Onboarding & Authentication</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #07090e;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        /* Transition Animation Truck */
+        .truck-drive-animation {
+            animation: driveAcross 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes driveAcross {
+            0% { transform: translateX(-120%) scale(0.8); opacity: 0; }
+            30% { opacity: 1; transform: translateX(-20%) scale(1.1); }
+            70% { opacity: 1; transform: translateX(50%) scale(1.1); }
+            100% { transform: translateX(180%) scale(0.8); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 relative">
+
+    <!-- Glowing Background Lights -->
+    <div class="fixed top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="fixed bottom-1/4 right-1/4 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Truck Transition Overlay (Triggers on Phase 1 Completion) -->
+    <div id="truck-overlay" class="fixed inset-0 z-50 pointer-events-none hidden flex items-center justify-center bg-black/60 backdrop-blur-md">
+        <div id="truck-container" class="text-emerald-400 text-7xl md:text-9xl drop-shadow-[0_0_35px_rgba(16,185,129,0.8)]">
+            <i class="fa-solid fa-truck-fast"></i>
+        </div>
+    </div>
+
+    <!-- MAIN ONBOARDING CONTAINER -->
+    <div class="w-full max-w-xl glass-card rounded-3xl p-6 md:p-10 relative z-10 space-y-8 border border-gray-800">
+
+        <!-- Logo & Header -->
+        <div class="text-center space-y-2">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-emerald-500 shadow-lg shadow-blue-500/30 text-2xl font-extrabold text-white mb-2">
+                ⚡
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">DRAPPR AI</h1>
+            <p class="text-xs md:text-sm text-gray-400">Global Autonomous Logistics Engine &bull; Phase 1 Setup</p>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="flex items-center justify-center space-x-3 text-xs font-semibold">
+            <span class="px-3 py-1 rounded-full bg-blue-600 text-white border border-blue-400 shadow-md">1. Identity & Auth</span>
+            <span class="text-gray-600">&rarr;</span>
+            <span class="px-3 py-1 rounded-full bg-gray-800 text-gray-400 border border-gray-700">2. Region & Language</span>
+            <span class="text-gray-600">&rarr;</span>
+            <span class="px-3 py-1 rounded-full bg-gray-800 text-gray-400 border border-gray-700">3. Phase 2 Map Access</span>
+        </div>
+
+        <!-- FORM CONTAINER -->
+        <form id="onboarding-form" onsubmit="handlePhase1Next(event)" class="space-y-6">
+
+            <!-- 1. Account Role Selection -->
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Select Account Role</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="user_role" value="shipper" checked class="peer hidden">
+                        <div class="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 peer-checked:border-blue-500 peer-checked:bg-blue-950/40 text-center transition space-y-1">
+                            <i class="fa-solid fa-box-archive text-blue-400 text-xl"></i>
+                            <div class="text-xs font-bold text-white">Shipper / Customer</div>
+                            <div class="text-[10px] text-gray-400">Book Freight & Track Rides</div>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="user_role" value="carrier" class="peer hidden">
+                        <div class="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 peer-checked:border-emerald-500 peer-checked:bg-emerald-950/40 text-center transition space-y-1">
+                            <i class="fa-solid fa-truck-moving text-emerald-400 text-xl"></i>
+                            <div class="text-xs font-bold text-white">Driver / Carrier</div>
+                            <div class="text-[10px] text-gray-400">Accept Jobs & Navigate</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 2. Authentication Credentials -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Full Name / Company Name</label>
+                    <input type="text" required placeholder="e.g. Noman Ali Shah" class="w-full bg-gray-900 border border-gray-700 focus:border-blue-500 rounded-xl px-4 py-3 text-xs text-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Phone Number (GPS Auth)</label>
+                    <input type="tel" required placeholder="+92 300 1234567" class="w-full bg-gray-900 border border-gray-700 focus:border-blue-500 rounded-xl px-4 py-3 text-xs text-white outline-none">
+                </div>
+            </div>
+
+            <!-- 3. Worldwide Country & Language Selection -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Country / Region (Worldwide)</label>
+                    <select id="country-select" required class="w-full bg-gray-900 border border-gray-700 focus:border-blue-500 rounded-xl px-4 py-3 text-xs text-white outline-none">
+                        <option value="IT">🇮🇹 Italy (Italia)</option>
+                        <option value="PK" selected>🇵🇰 Pakistan</option>
+                        <option value="SA">🇸🇦 Saudi Arabia (المملكة العربية السعودية)</option>
+                        <option value="TR">🇹🇷 Turkey (Türkiye)</option>
+                        <option value="DE">🇩🇪 Germany (Deutschland)</option>
+                        <option value="US">🇺🇸 United States (USA)</option>
+                        <option value="AE">🇦🇪 United Arab Emirates</option>
+                        <option value="FR">🇫🇷 France</option>
+                        <option value="JP">🇯🇵 Japan (日本)</option>
+                        <option value="ES">🇪🇸 Spain (España)</option>
+                        <option value="RU">🇷🇺 Russia (Россия)</option>
+                        <option value="AU">🇦🇺 Australia</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">App Preferred Language</label>
+                    <select id="lang-select" required class="w-full bg-gray-900 border border-gray-700 focus:border-blue-500 rounded-xl px-4 py-3 text-xs text-white outline-none">
+                        <option value="it">Italiano (Italian)</option>
+                        <option value="ur" selected>اردو (Urdu)</option>
+                        <option value="en">English (Global)</option>
+                        <option value="ar">العربية (Arabic)</option>
+                        <option value="tr">Türkçe (Turkish)</option>
+                        <option value="de">Deutsch (German)</option>
+                        <option value="fr">Français (French)</option>
+                        <option value="zh">中文 (Chinese)</option>
+                        <option value="ru">Русский (Russian)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Next Phase Action Button -->
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 hover:opacity-90 text-white font-bold py-4 rounded-2xl shadow-xl shadow-blue-600/30 transition duration-300 text-xs tracking-wider uppercase flex items-center justify-center space-x-2">
+                <span>Save Setup & Next Step</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <footer class="text-center text-[10px] text-gray-500">
+            Drappr AI Enterprise Platform &bull; Phase 1 Micro-Frontend
+        </footer>
+
+    </div>
+
+    <script>
+        function handlePhase1Next(event) {
+            event.preventDefault();
+            
+            // Show Truck Transition Animation
+            const overlay = document.getElementById('truck-overlay');
+            const truck = document.getElementById('truck-container');
+            
+            overlay.classList.remove('hidden');
+            truck.classList.add('truck-drive-animation');
+
+            // Collect Phase 1 Setup Data
+            const setupData = {
+                role: document.querySelector('input[name="user_role"]:checked').value,
+                country: document.getElementById('country-select').value,
+                language: document.getElementById('lang-select').value,
+                timestamp: new Date().toISOString()
+            };
+
+            // Save to Local Session Storage
+            localStorage.setItem('drappr_phase1_config', JSON.stringify(setupData));
+
+            // Redirect / Move to Phase 2 after truck animation passes
+            setTimeout(() => {
+                alert("✅ Phase 1 Setup Complete! Saved Country: " + setupData.country + " | Language: " + setupData.language + "\n\nReady for Phase 2 GitHub Integration!");
+                overlay.classList.add('hidden');
+            }, 1600);
+        }
+    </script>
+</body>
+      </html>
